@@ -15,7 +15,7 @@ __pycache__/
 # Skips your local SQLite/JSON database file
 drone_events.json
 *.sqlite3
-*.db
+
 
 # 4. Images & Media
 # Skips downloaded images or captured frames

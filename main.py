@@ -1,7 +1,8 @@
 # main.py
 
 from services.analyzer import Analyzer
-from services.database import init_db, insert_event, log_to_json
+# Added get_repeated_threats to the imports
+from services.database import init_db, insert_event, log_to_json, get_repeated_threats 
 from services.alert_service import generate_alert
 from services.query_service import show_by_object, show_all_events
 from simulator.simulator import get_simulated_frames
@@ -69,14 +70,25 @@ def main():
     print("\n--- All Events Stored ---")
 
     # -------------------------------
-    # Queries
+    # Step 6: Queries & Frequency Analysis
     # -------------------------------
+    
+    # Requirement: "show all truck events" [cite: 37]
     print("\n--- QUERY: TRUCK EVENTS ---")
     show_by_object("truck")
 
     print("\n--- QUERY: ALL EVENTS ---")
     show_all_events()
 
+    # Requirement: "identify objects entered twice today" 
+    print("\n--- QUERY: REPEATED THREATS (Frequency Analysis) ---")
+    repeats = get_repeated_threats(threshold=2)
+    
+    if repeats:
+        for obj, color, count in repeats:
+            print(f"ALERT: {color} {obj} detected {count} times! (Pattern Identified)")
+    else:
+        print("No repeated threats detected.")
 
 if __name__ == "__main__":
     main()
