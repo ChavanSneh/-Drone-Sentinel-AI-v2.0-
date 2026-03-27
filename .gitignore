@@ -1,0 +1,31 @@
+# 1. Virtual Environment
+# This skips the .venv folder and all installed libraries
+.venv/
+venv/
+env/
+ENV/
+
+# 2. Python artifacts
+# Skips compiled code and cache
+__pycache__/
+*.py[cod]
+*$py.class
+
+# 3. Database
+# Skips your local SQLite/JSON database file
+drone_events.json
+*.sqlite3
+*.db
+
+# 4. Images & Media
+# Skips downloaded images or captured frames
+*.jpg
+*.jpeg
+*.png
+*.gif
+*.bmp
+downloads/
+frames/
+
+# 5. Environment Variables / Secrets
+.env

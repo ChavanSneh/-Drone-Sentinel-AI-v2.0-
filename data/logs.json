@@ -1,0 +1,42 @@
+[
+    {
+        "time": "00:01",
+        "location": "gate",
+        "object": "truck",
+        "color": null,
+        "event": null,
+        "alert": "none",
+        "event_type": "none",
+        "severity": "none"
+    },
+    {
+        "time": "00:03",
+        "location": "fence",
+        "object": "person",
+        "color": null,
+        "event": "loitering",
+        "alert": "alert",
+        "event_type": "loitering",
+        "severity": "high"
+    },
+    {
+        "time": "00:07",
+        "location": "gate",
+        "object": "truck",
+        "color": "white",
+        "event": "parked",
+        "alert": "none",
+        "event_type": "none",
+        "severity": "none"
+    },
+    {
+        "time": "00:12",
+        "location": "road",
+        "object": "car",
+        "color": "red",
+        "event": "speeding",
+        "alert": "warning",
+        "event_type": "speeding",
+        "severity": "medium"
+    }
+]
