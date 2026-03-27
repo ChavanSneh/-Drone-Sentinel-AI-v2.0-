@@ -19,13 +19,7 @@ drone_events.json
 
 # 4. Images & Media
 # Skips downloaded images or captured frames
-*.jpg
-*.jpeg
-*.png
-*.gif
-*.bmp
-downloads/
-frames/
+
 
 # 5. Environment Variables / Secrets
 .env
