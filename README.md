@@ -72,17 +72,14 @@ As encouraged by the assignment, this project leveraged a multi-LLM workflow (**
 
 ## ▶️ How to Run
 
-### 1. Install Dependencies
-
-pip install transformers pillow torch
+1. Install Dependencies
+   pip install transformers pillow torch
 
 2. Execute the System 
-
-python main.py
+   python main.py
 
 3. Testing Persistence
-4. 
-Run the script twice. On the second run, the system will demonstrate its Memory by flagging recurring threats stored in drone_security.db.
+   Run the script twice. On the second run, the system will demonstrate its Memory by flagging recurring threats stored in drone_security.db.
 
 ---
 
