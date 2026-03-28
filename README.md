@@ -87,9 +87,7 @@ Run the script twice. On the second run, the system will demonstrate its Memory 
 ---
 
 ## 🧠 Design Decisions: Why BLIP?
-
-# I chose BLIP over CLIP because security analysis requires descriptive context. While CLIP is effective for classification, BLIP provides the linguistic detail necessary to differentiate between a "parked truck" and a "speeding truck," which is vital for accurate threat assessment.
+ I chose BLIP over CLIP because security analysis requires descriptive context. While CLIP is effective for classification, BLIP provides the linguistic detail necessary to differentiate between a "parked truck" and a "speeding truck," which is vital for accurate threat assessment.
 
 ## 👨‍💻 Author
-
-# Sneh Chavan AI Engineer Candidate
+Sneh Chavan AI Engineer Candidate
