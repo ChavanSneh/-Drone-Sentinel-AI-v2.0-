@@ -1,27 +1,27 @@
 import re
 
 # -------------------------------
-# Keywords
+# Keywords (Expanded for better AI matching)
 # -------------------------------
 OBJECT_KEYWORDS = {
-    "person": ["person", "man", "woman"],
-    "car": ["car", "vehicle", "suv"],
-    "truck": ["truck", "f150", "pickup"] # Added F150 for the assignment spec
+    "person": ["person", "man", "woman", "individual", "pedestrian"],
+    "car": ["car", "vehicle", "suv", "sedan", "auto"],
+    "truck": ["truck", "f150", "pickup", "lorry", "semi"]
 }
 
-COLOR_KEYWORDS = ["red", "blue", "white", "black"]
+COLOR_KEYWORDS = ["red", "blue", "white", "black", "silver", "grey"]
 
 LOCATION_KEYWORDS = {
-    "gate": ["gate"],
-    "fence": ["fence"],
-    "road": ["road", "highway"],
-    "garage": ["garage", "parking"]
+    "gate": ["gate", "entrance", "entry"],
+    "fence": ["fence", "perimeter", "boundary"],
+    "road": ["road", "highway", "street", "driveway", "lane"],
+    "garage": ["garage", "parking", "carport"]
 }
 
 EVENT_KEYWORDS = {
-    "parked": ["parked"],
-    "loitering": ["loitering", "standing", "waiting", "leaning"],
-    "speeding": ["speeding", "fast", "driving", "moving", "riding"]
+    "parked": ["parked", "stationary", "stopped"],
+    "loitering": ["loitering", "standing", "waiting", "leaning", "idling"],
+    "speeding": ["speeding", "fast", "driving quickly", "racing", "moving fast"]
 }
 
 class Analyzer:
@@ -53,29 +53,38 @@ class Analyzer:
         event = entities.get("event")
         location = entities.get("location")
         
-        # --- PRIORITY 1: HIGH SEVERITY (ALERTS) ---
-        if obj == "person" and event == "loitering":
-            return {"event_type": "loitering", "severity": "high"}
+        # 1. DYNAMIC HIGH SEVERITY (ALERTS)
+        if obj == "person":
+            # If AI sees a person at a sensitive location it detected
+            if location in ["fence", "gate", "garage"]:
+                return {"event_type": f"unauthorized_{location}_access", "severity": "high"}
+            
+            # If AI identifies loitering behavior
+            if event == "loitering":
+                return {"event_type": "suspicious_loitering", "severity": "high"}
 
-        if obj == "person" and location == "fence":
-            return {"event_type": "intrusion_risk", "severity": "high"}
+        # 2. MEDIUM SEVERITY (WARNINGS)
+        if obj in ("car", "truck"):
+            if event == "speeding":
+                return {"event_type": "speeding_vehicle", "severity": "medium"}
 
-        # --- PRIORITY 2: MEDIUM SEVERITY (WARNINGS) ---
-        if obj in ("car", "truck") and event == "speeding":
-            return {"event_type": "speeding", "severity": "medium"}
+            if location:
+                repeat_count = sum(
+                    1 for h in history 
+                    if h.get("object") == obj and h.get("location") == location
+                )
+                if repeat_count >= 1:
+                    return {"event_type": "repeated_vehicle_sighting", "severity": "medium"}
 
-        if obj in ("car", "truck") and location:
-            repeat_count = sum(
-                1 for h in history
-                if h.get("object") == obj and h.get("location") == location
-            )
-            if repeat_count >= 1:
-                return {"event_type": "repeated_vehicle", "severity": "medium"}
+        # 3. LOW SEVERITY (INFO)
+        # Updates whenever AI sees something, even if not a threat
+        if obj or location:
+            return {"event_type": "general_observation", "severity": "low"}
 
         return {"event_type": "none", "severity": "none"}
 
     def analyze_frame(self, description: str, telemetry: dict, history: list) -> dict:
-        """Ties extraction and detection together for the main loop"""
+        """Ties extraction and detection together"""
         entities = self.extract_entities(description)
         event_info = self.detect_event(entities, history)
 
@@ -88,7 +97,9 @@ class Analyzer:
 
         return {
             "time": telemetry.get("time"),
-            "location": telemetry.get("location") or entities.get("location"),
+            # AI logic first: if VLM sees a location, use it. 
+            # Only use telemetry as a fallback.
+            "location": entities.get("location") or telemetry.get("location"),
             "object": entities.get("object"),
             "color": entities.get("color"),
             "event": entities.get("event"),
