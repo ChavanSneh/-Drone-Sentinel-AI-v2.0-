@@ -19,7 +19,13 @@ drone_events.json
 
 # 4. Images & Media
 # Skips downloaded images or captured frames
-
+test_images/
+*.jpg
+*.png
+*.jpeg
+# Also ignore your local database and virtual environment!
+.venv/
+__pycache__/
 
 # 5. Environment Variables / Secrets
 .env

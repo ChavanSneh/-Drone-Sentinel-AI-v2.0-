@@ -1,13 +1,10 @@
 # main.py
-
 from services.analyzer import Analyzer
-# Added get_repeated_threats to the imports
 from services.database import init_db, insert_event, log_to_json, get_repeated_threats 
 from services.alert_service import generate_alert
 from services.query_service import show_by_object, show_all_events
 from simulator.simulator import get_simulated_frames
 from services.vlm import VLM
-
 
 def main():
     print("--- Initializing Drone Security System ---")
@@ -23,72 +20,75 @@ def main():
 
     for frame in frames:
         # -------------------------------
-        # Step 1: Get description (VLM or fallback)
+        # Step 1: Get description (AI Vision)
         # -------------------------------
         try:
             if "image" in frame:
+                # Use the VLM to 'see' the image
                 description = vlm.generate_description(frame["image"])
             else:
+                # Fallback to provided description if no image path exists
                 description = frame.get("description", "unknown scene")
         except Exception as e:
             print(f"[VLM ERROR] {e}")
             description = frame.get("description", "unknown scene")
 
-        print(f"\nFrame: {frame}")
-        print(f"Generated Description: {description}")
+        print(f"\n--- New Frame Detected ---")
+        print(f"AI Description: {description}")
 
         # -------------------------------
-        # Step 2: Analyze
+        # Step 2: Analyze (Turning Text into Structured Data)
         # -------------------------------
         result = analyzer.analyze_frame(
             description=description,
             telemetry={
-                "time": frame["time"],
-                "location": frame["location"]
+                "time": frame.get("time"),
+                "location": frame.get("location")
             },
             history=history
         )
 
-        print(result)
+        # -------------------------------
+        # Step 3: Store & Log
+        # -------------------------------
+        # We 'flatten' the lists to strings for the DB (e.g., ['car'] -> "car")
+        db_ready_result = result.copy()
+        db_ready_result["object"] = ", ".join(result["object"]) if result["object"] else "none"
+        db_ready_result["color"] = ", ".join(result["color"]) if result["color"] else "none"
+        db_ready_result["event"] = ", ".join(result["event"]) if result["event"] else "none"
+
+        insert_event(db_ready_result)
+        log_to_json(result) # JSON can handle the original lists
 
         # -------------------------------
-        # Step 3: Store
-        # -------------------------------
-        insert_event(result)
-        log_to_json(result)
-
-        # -------------------------------
-        # Step 4: Alert
+        # Step 4: Alerting & Context Update
         # -------------------------------
         generate_alert(result)
-
-        # -------------------------------
-        # Step 5: Update context
-        # -------------------------------
         history.append(result)
 
-    print("\n--- All Events Stored ---")
+        print(f"Result: {result['event_type']} | Severity: {result['severity']}")
+
+    print("\n--- Processing Complete: Running Frequency Analysis ---")
 
     # -------------------------------
-    # Step 6: Queries & Frequency Analysis
+    # Step 5: Queries (Fulfilling Requirements)
     # -------------------------------
     
-    # Requirement: "show all truck events" [cite: 37]
     print("\n--- QUERY: TRUCK EVENTS ---")
     show_by_object("truck")
 
     print("\n--- QUERY: ALL EVENTS ---")
     show_all_events()
 
-    # Requirement: "identify objects entered twice today" 
-    print("\n--- QUERY: REPEATED THREATS (Frequency Analysis) ---")
+    # Requirement: "Identify objects entered twice today"
+    print("\n--- QUERY: REPEATED THREATS (Pattern Recognition) ---")
     repeats = get_repeated_threats(threshold=2)
     
     if repeats:
-        for obj, color, count in repeats:
-            print(f"ALERT: {color} {obj} detected {count} times! (Pattern Identified)")
-    else:
-        print("No repeated threats detected.")
+     for obj, color, count in repeats:
+        # If color is "none" or "unknown", just don't print it
+        color_str = f"{color} " if color not in ["none", "unknown", None] else ""
+        print(f"ALERT: {color_str}{obj} detected {count} times today! (Pattern Identified)")
 
 if __name__ == "__main__":
     main()
