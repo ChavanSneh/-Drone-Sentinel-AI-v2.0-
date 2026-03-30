@@ -82,8 +82,8 @@ python main.py
 Run the script multiple times. The system will demonstrate its Relational Memory by flagging recurring threats stored in drone_security.db, even after the script is restarted.
 ---
 
-👨‍💻 Author
+## 👨‍💻 Author
 
-Sneh Chavan
+# Sneh Chavan
 
-AI Product Engineer | Specializing in Rapid Prototyping & AI Orchestration
+# AI Product Engineer | Specializing in Rapid Prototyping & AI Orchestration
