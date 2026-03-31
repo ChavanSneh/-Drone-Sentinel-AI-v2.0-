@@ -50,11 +50,9 @@
 
 ## ▶️ Installation & Flight Manual
 
-### 1. Clone & Install Dependencies 
+### 1. Clone & Install Dependencies: pip install transformers pillow torch
 
-### pip install transformers pillow torch
-
-### 2. Launch the MissionBashpython main.py
+### 2. Launch the Mission: python main.py
 
 ### 3. Review the Black BoxCheck drone.log to see the full forensic history of the flight, including any suppressed system errors and successful pattern detections.
 
