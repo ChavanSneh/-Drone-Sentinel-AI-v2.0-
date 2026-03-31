@@ -9,15 +9,28 @@ def run_tests():
     analyzer = Analyzer()
     history = []
 
-    test_inputs = [
-        {"desc": "Blue truck at gate", "expected": "truck"},
-        {"desc": "Person standing near fence", "expected": "person"},
-        {"desc": "Red car speeding", "expected": "car"},
+    test_cases = [
+        {
+            "desc": "Blue truck at gate",
+            "expected_first_object": "trucks",
+            "expected_severity": "medium",
+            "expected_event": "vehicle_near_secure_perimeter",
+        },
+        {
+            "desc": "Person standing near fence",
+            "expected_first_object": "person",
+            "expected_severity": "high",
+            "expected_event": "unauthorized_fence_access",
+        },
+        {
+            "desc": "Red car speeding",
+            "expected_first_object": "cars",
+            "expected_severity": "medium",
+            "expected_event": "speeding_vehicle_detected",
+        },
     ]
 
-    print("\n--- RUNNING TESTS ---")
-
-    for test in test_inputs:
+    for test in test_cases:
         result = analyzer.analyze_frame(
             description=test["desc"],
             telemetry={"time": "00:00", "location": "test"},
@@ -25,6 +38,19 @@ def run_tests():
         )
         history.append(result)
 
-        print(f"Input: {test['desc']}")
-        print(f"Detected: {result['object']} | Expected: {test['expected']}")
-        print("---")
+        assert result["object"], f"No object extracted for: {test['desc']}"
+        assert result["object"][0] == test["expected_first_object"], (
+            f"Object mismatch: expected {test['expected_first_object']}, got {result['object'][0]}"
+        )
+        assert result["severity"] == test["expected_severity"], (
+            f"Severity mismatch: expected {test['expected_severity']}, got {result['severity']}"
+        )
+        assert result["event_type"] == test["expected_event"], (
+            f"Event mismatch: expected {test['expected_event']}, got {result['event_type']}"
+        )
+
+    print("All analyzer tests passed.")
+
+
+if __name__ == "__main__":
+    run_tests()

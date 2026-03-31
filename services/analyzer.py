@@ -4,9 +4,10 @@ import re
 # Keywords (Expanded for better AI matching)
 # -------------------------------
 OBJECT_KEYWORDS = {
+    "person": ["person", "man", "woman", "individual", "pedestrian", "group", "people"],
     "people": ["person", "man", "woman", "individual", "pedestrian", "group", "people"],
     "cars": ["car", "cars", "vehicle", "vehicles", "suv", "sedan", "auto"],
-    "trucks": ["truck", "trucks", "f150", "pickup", "lorry","lorries", "semi"]
+    "trucks": ["truck", "trucks", "f150", "pickup", "lorry", "lorries", "semi"]
 }
 
 COLOR_KEYWORDS = ["red", "blue", "white", "black", "silver", "grey", "yellow", "green", "unknown"]
@@ -59,14 +60,15 @@ class Analyzer:
             return {"event_type": f"object_stuck_at_{loc_name}", "severity": "high"}
 
         # Security Check: Unauthorized person activity
-        if "person" in obj_list:
+        if any(person_label in obj_list for person_label in ("person", "people", "individual")):
             if any(loc in ["fence", "gate", "garage"] for loc in location_list):
                 return {"event_type": f"unauthorized_{location_list[0]}_access", "severity": "high"}
             if "loitering" in event_list:
                 return {"event_type": "suspicious_loitering", "severity": "high"}
 
         # --- PRIORITY 2: MEDIUM SEVERITY (WARNINGS) ---
-        if any(v in obj_list for v in ("car", "truck")):
+        vehicle_keywords = {"car", "cars", "truck", "trucks"}
+        if any(vehicle in obj_list for vehicle in vehicle_keywords):
             # Speeding detection
             if "speeding" in event_list:
                 return {"event_type": "speeding_vehicle_detected", "severity": "medium"}
@@ -79,12 +81,16 @@ class Analyzer:
             if location_list:
                 repeat_count = sum(
                     1 for h in history
-                    if any(o in h.get("object", []) for o in ("car", "truck"))
+                    if any(v in h.get("object", []) for v in vehicle_keywords)
                     and any(l in h.get("location", []) for l in location_list)
                 )
                 if repeat_count >= 1:
                     loc_name = location_list[0]
                     return {"event_type": f"repeated_vehicle_at_{loc_name}", "severity": "medium"}
+
+            # Proximity to secure perimeter locations is higher-risk
+            if any(loc in ["fence", "gate", "garage"] for loc in location_list):
+                return {"event_type": "vehicle_near_secure_perimeter", "severity": "medium"}
 
         # --- PRIORITY 3: LOW SEVERITY (INFO) ---
         if obj_list:

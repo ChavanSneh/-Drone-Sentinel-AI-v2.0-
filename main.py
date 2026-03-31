@@ -7,10 +7,6 @@ import config
 for lib in config.SILENCED_LIBRARIES:
     logging.getLogger(lib).setLevel(logging.ERROR)
 
-def main():
-    vlm = VLM(model_id=config.MODEL_ID, device=config.DEVICE)
-    # ... use config.IMAGE_SOURCE, config.DB_PATH, etc.
-
 # 1. SHUT DOWN LIBRARY LOGGING (Do this before importing transformers/VLM)
 logging.getLogger("transformers").setLevel(logging.ERROR)
 logging.getLogger("httpx").setLevel(logging.ERROR)
@@ -67,12 +63,7 @@ def main():
             logging.error(f"Unexpected VLM crash: {e}")
             description = "observation failure"
 
-            # This hides the 404/Connection logs from Hugging Face
-            logging.getLogger("transformers").setLevel(logging.ERROR)
-            logging.getLogger("httpx").setLevel(logging.ERROR)
-            logging.basicConfig(...) # Keep your existing config here
-
-            # --- ADD THESE LINES TO HIDE THE NOISE ---
+            # Keep inference noise suppressed, no reconfig re-run needed
             logging.getLogger("transformers").setLevel(logging.ERROR)
             logging.getLogger("httpx").setLevel(logging.ERROR)
 
@@ -110,6 +101,8 @@ def main():
         # -------------------------------
         generate_alert(result)
         history.append(result)
+        if len(history) > 100:
+            history.pop(0)  # Keep a bounded recent history window for memory
         
         # Log the result to the console and file
         logging.info(f"Processed Frame: {result['event_type']} | Severity: {result['severity']}")

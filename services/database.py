@@ -78,14 +78,25 @@ def insert_event(event: Dict):
     conn.close()
 
 def query_by_object(object_type: str) -> List[Dict]:
-    """Uses LIKE to find objects even if they are part of a multi-object list."""
+    """Parses stored JSON object list to find matching objects."""
     conn = sqlite3.connect(DB_NAME)
     cursor = conn.cursor()
-    # Using % wildcard so "car" matches "car, truck"
-    cursor.execute("SELECT * FROM events WHERE object LIKE ?", (f"%{object_type}%",))
+    cursor.execute("SELECT * FROM events")
     rows = cursor.fetchall()
     conn.close()
-    return [_row_to_dict(row) for row in rows]
+
+    matched = []
+    for row in rows:
+        raw_object = row[3] or "[]"
+        try:
+            object_list = json.loads(raw_object)
+        except (json.JSONDecodeError, TypeError):
+            object_list = [raw_object]
+
+        if any(object_type.lower() == str(item).lower() or object_type.lower() in str(item).lower() for item in object_list):
+            matched.append(_row_to_dict(row))
+
+    return matched
 
 def query_all() -> List[Dict]:
     conn = sqlite3.connect(DB_NAME)
@@ -116,24 +127,3 @@ def get_repeated_threats(threshold=2):
     conn.close()
     return repeats
 
-# When SAVING to the database:
-def save_event(self, event_data):
-    # Convert the list to a JSON string
-    object_list_json = json.dumps(event_data['objects']) 
-    
-    query = "INSERT INTO events (objects, location, severity) VALUES (?, ?, ?)"
-    self.cursor.execute(query, (object_list_json, event_data['location'], event_data['severity']))
-    self.conn.commit()
-
-# When READING from the database:
-def get_all_events(self):
-    self.cursor.execute("SELECT * FROM events")
-    rows = self.cursor.fetchall()
-    
-    events = []
-    for row in rows:
-        event = list(row)
-        # Convert the JSON string back into a real Python list
-        event[1] = json.loads(row[1]) 
-        events.append(event)
-    return events
