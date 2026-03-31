@@ -52,7 +52,7 @@
 
 ### 1. Clone & Install Dependencies 
 
-###pip install transformers pillow torch
+### pip install transformers pillow torch
 
 ### 2. Launch the MissionBashpython main.py
 
