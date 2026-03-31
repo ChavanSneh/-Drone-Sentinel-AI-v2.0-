@@ -1,6 +1,15 @@
 import logging
 import os
 import json
+import config
+
+# Use the config to silence logs
+for lib in config.SILENCED_LIBRARIES:
+    logging.getLogger(lib).setLevel(logging.ERROR)
+
+def main():
+    vlm = VLM(model_id=config.MODEL_ID, device=config.DEVICE)
+    # ... use config.IMAGE_SOURCE, config.DB_PATH, etc.
 
 # 1. SHUT DOWN LIBRARY LOGGING (Do this before importing transformers/VLM)
 logging.getLogger("transformers").setLevel(logging.ERROR)
