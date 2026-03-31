@@ -29,8 +29,12 @@
 ###⚡ AI-Orchestrated DevelopmentThis system was built using a Triple-LLM Workflow:Claude & Gemini: Acted as System Architects for the distributed "Air-to-Ground" model.ChatGPT & GitHub Copilot: Served as Implementation Specialists for SQL optimization and JSON logic.Impact: Achieved a production-grade prototype with robust error handling and data persistence in under 24 hours.
 ---
 ## ▶️ Installation & Flight Manual
-### 1. Clone & Install DependenciesBashpip install transformers pillow torch
+### 1. Clone & Install Dependencies 
+
+###pip install transformers pillow torch
+
 ### 2. Launch the MissionBashpython main.py
+
 ### 3. Review the Black BoxCheck drone.log to see the full forensic history of the flight, including any suppressed system errors and successful pattern detections.
 ---
 ## 👨‍💻 AuthorSneh Chavan AI Product Engineer | Specializing in Rapid Prototyping & AI Orchestration
