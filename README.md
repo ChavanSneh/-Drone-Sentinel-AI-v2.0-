@@ -1,6 +1,6 @@
-# 🚁 Drone Sentinel AI (v2.0
+# 🚁 Drone Sentinel AI (v2.0)
 
-## )An advanced Autonomous AI Orchestration Engine that transforms raw drone visual data into structured, actionable security intelligence.
+## An advanced Autonomous AI Orchestration Engine that transforms raw drone visual data into structured, actionable security intelligence.
 
 ### Version 2.0 introduces a Distributed Architecture, separating high-compute Edge Vision from Ground Station Control for a production-ready simulation.
 ---
@@ -10,7 +10,7 @@
 
 ### 2. The Ground Station (Control & Memory)Simulation Suite (simulator.py): Generates a high-fidelity synthetic environment to stress-test the AI's logic.Relational Memory (database.py): Powered by SQLite for long-term indexing. v2.0 utilizes JSON Serialization to store complex object lists, ensuring 100% data integrity for multi-object detections.
 
-#### Black Box Recorder (drone.log): A professional logging framework that records every system event, error, and sighting for post-flight forensic auditing.
+### Black Box Recorder (drone.log): A professional logging framework that records every system event, error, and sighting for post-flight forensic auditing.
 ---
 ##🚀 Key Features (v2.0 Updates)
 ---
@@ -28,9 +28,9 @@
 ---
 ###⚡ AI-Orchestrated DevelopmentThis system was built using a Triple-LLM Workflow:Claude & Gemini: Acted as System Architects for the distributed "Air-to-Ground" model.ChatGPT & GitHub Copilot: Served as Implementation Specialists for SQL optimization and JSON logic.Impact: Achieved a production-grade prototype with robust error handling and data persistence in under 24 hours.
 ---
-### ▶️ Installation & Flight Manual
-#### 1. Clone & Install DependenciesBashpip install transformers pillow torch
-#### 2. Launch the MissionBashpython main.py
-#### 3. Review the Black BoxCheck drone.log to see the full forensic history of the flight, including any suppressed system errors and successful pattern detections.
+## ▶️ Installation & Flight Manual
+### 1. Clone & Install DependenciesBashpip install transformers pillow torch
+### 2. Launch the MissionBashpython main.py
+### 3. Review the Black BoxCheck drone.log to see the full forensic history of the flight, including any suppressed system errors and successful pattern detections.
 ---
 ## 👨‍💻 AuthorSneh Chavan AI Product Engineer | Specializing in Rapid Prototyping & AI Orchestration
