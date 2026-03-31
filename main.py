@@ -1,4 +1,5 @@
-# main.py
+import logging
+import json
 from services.analyzer import Analyzer
 from services.database import init_db, insert_event, log_to_json, get_repeated_threats 
 from services.alert_service import generate_alert
@@ -6,8 +7,18 @@ from services.query_service import show_by_object, show_all_events
 from simulator.simulator import get_simulated_frames
 from services.vlm import VLM
 
+# 1. Configure logging (Global scope is better for initialization)
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(levelname)s - %(message)s',
+    handlers=[
+        logging.FileHandler("drone.log"),
+        logging.StreamHandler()
+    ]
+)
+
 def main():
-    print("--- Initializing Drone Security System ---")
+    logging.info("--- Initializing Drone Security System ---")
     init_db()
 
     analyzer = Analyzer()
@@ -16,28 +27,27 @@ def main():
     frames = get_simulated_frames()
     history = []
 
-    print("\n--- Processing Frames ---\n")
+    logging.info("--- Starting Frame Processing Flow ---")
 
     for frame in frames:
         # -------------------------------
-        # Step 1: Get description (AI Vision)
+        # Step 1: AI Perception (VLM)
         # -------------------------------
         try:
             if "image" in frame:
-                # Use the VLM to 'see' the image
                 description = vlm.generate_description(frame["image"])
             else:
-                # Fallback to provided description if no image path exists
                 description = frame.get("description", "unknown scene")
+            
+            # Handle potential error strings returned by VLM
+            if "error" in description:
+                logging.error(f"Vision failure: {description}")
         except Exception as e:
-            print(f"[VLM ERROR] {e}")
-            description = frame.get("description", "unknown scene")
-
-        print(f"\n--- New Frame Detected ---")
-        print(f"AI Description: {description}")
+            logging.error(f"Unexpected VLM crash: {e}")
+            description = "observation failure"
 
         # -------------------------------
-        # Step 2: Analyze (Turning Text into Structured Data)
+        # Step 2: Reasoning (NLP Analysis)
         # -------------------------------
         result = analyzer.analyze_frame(
             description=description,
@@ -49,46 +59,55 @@ def main():
         )
 
         # -------------------------------
-        # Step 3: Store & Log
+        # Step 3: Persistence (Data Integrity)
         # -------------------------------
-        # We 'flatten' the lists to strings for the DB (e.g., ['car'] -> "car")
+        
+        # PRO-FIX: Use JSON serialization instead of comma-joining
+        # This prevents the "comma collision" bug Copilot mentioned
         db_ready_result = result.copy()
-        db_ready_result["object"] = ", ".join(result["object"]) if result["object"] else "none"
-        db_ready_result["color"] = ", ".join(result["color"]) if result["color"] else "none"
-        db_ready_result["event"] = ", ".join(result["event"]) if result["event"] else "none"
+        db_ready_result["object"] = json.dumps(result["object"])
+        db_ready_result["color"] = json.dumps(result["color"])
+        db_ready_result["event"] = json.dumps(result["event"])
 
-        insert_event(db_ready_result)
-        log_to_json(result) # JSON can handle the original lists
+        try:
+            insert_event(db_ready_result)
+            log_to_json(result)
+        except Exception as e:
+            logging.error(f"Database insertion failed: {e}")
 
         # -------------------------------
-        # Step 4: Alerting & Context Update
+        # Step 4: Execution (Alerts & Context)
         # -------------------------------
         generate_alert(result)
         history.append(result)
-
-        print(f"Result: {result['event_type']} | Severity: {result['severity']}")
-
-    print("\n--- Processing Complete: Running Frequency Analysis ---")
+        
+        # Log the result to the console and file
+        logging.info(f"Processed Frame: {result['event_type']} | Severity: {result['severity']}")
 
     # -------------------------------
-    # Step 5: Queries (Fulfilling Requirements)
+    # Step 5: Intelligence Queries
     # -------------------------------
-    
+    print("\n" + "="*40)
+    print("ANALYSIS REPORT")
+    print("="*40)
+
     print("\n--- QUERY: TRUCK EVENTS ---")
-    show_by_object("truck")
+    show_by_object("trucks") # Updated to match your new plural labels
 
     print("\n--- QUERY: ALL EVENTS ---")
     show_all_events()
 
-    # Requirement: "Identify objects entered twice today"
     print("\n--- QUERY: REPEATED THREATS (Pattern Recognition) ---")
     repeats = get_repeated_threats(threshold=2)
     
     if repeats:
-     for obj, color, count in repeats:
-        # If color is "none" or "unknown", just don't print it
-        color_str = f"{color} " if color not in ["none", "unknown", None] else ""
-        print(f"ALERT: {color_str}{obj} detected {count} times today! (Pattern Identified)")
+        for obj, color, count in repeats:
+            # Clean up JSON strings if they come back from the DB
+            obj_name = obj.strip('"[]') 
+            color_str = f"{color} " if color not in ["none", "unknown", None] else ""
+            logging.warning(f"PATTERN IDENTIFIED: {color_str}{obj_name} detected {count} times!")
+    else:
+        print("No repeated threats identified in this session.")
 
 if __name__ == "__main__":
     main()

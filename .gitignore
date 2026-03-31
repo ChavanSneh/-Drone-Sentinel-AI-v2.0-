@@ -1,31 +1,39 @@
 # 1. Virtual Environment
-# This skips the .venv folder and all installed libraries
+# Skips all local environment folders
 .venv/
 venv/
 env/
 ENV/
 
-# 2. Python artifacts
-# Skips compiled code and cache
+# 2. Python Artifacts
+# Skips compiled code and local caches
 __pycache__/
 *.py[cod]
 *$py.class
+.pytest_cache/
 
-# 3. Database
-# Skips your local SQLite/JSON database file
+# 3. Database & Data Logs
+# Skips the relational database and the JSON backup
+drone_security.db
 drone_events.json
 *.sqlite3
+*.db
 
+# 4. Logs
+# Skips the operational logs we just added
+drone.log
+*.log
 
-# 4. Images & Media
-# Skips downloaded images or captured frames
-test_images/
+# 5. Images & Media
+# Skips the source images and processed frames
+# (Essential if you're using real images for testing)
+data/images/
 *.jpg
 *.png
 *.jpeg
-# Also ignore your local database and virtual environment!
-.venv/
-__pycache__/
-
-# 5. Environment Variables / Secrets
+data/images/truck2.jpg
+data/images/truck.jpg
+data/images/person.jpg
+# 6. Environment Variables / Secrets
+# Skips local API keys or config secrets
 .env

@@ -115,3 +115,25 @@ def get_repeated_threats(threshold=2):
     repeats = cursor.fetchall() 
     conn.close()
     return repeats
+
+# When SAVING to the database:
+def save_event(self, event_data):
+    # Convert the list to a JSON string
+    object_list_json = json.dumps(event_data['objects']) 
+    
+    query = "INSERT INTO events (objects, location, severity) VALUES (?, ?, ?)"
+    self.cursor.execute(query, (object_list_json, event_data['location'], event_data['severity']))
+    self.conn.commit()
+
+# When READING from the database:
+def get_all_events(self):
+    self.cursor.execute("SELECT * FROM events")
+    rows = self.cursor.fetchall()
+    
+    events = []
+    for row in rows:
+        event = list(row)
+        # Convert the JSON string back into a real Python list
+        event[1] = json.loads(row[1]) 
+        events.append(event)
+    return events

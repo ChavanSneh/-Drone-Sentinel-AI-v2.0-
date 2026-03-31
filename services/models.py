@@ -1,24 +1,16 @@
 # services/models.py
 
-class DroneEvent:
-    def __init__(self, data: dict):
-        self.time = data.get("time")
-        self.location = data.get("location")
-        self.object = data.get("object")
-        self.color = data.get("color")
-        self.event = data.get("event")
-        self.alert = data.get("alert")
-        self.event_type = data.get("event_type")
-        self.severity = data.get("severity")
+from typing import TypedDict, List, Optional
 
-    def to_dict(self):
-        return {
-            "time": self.time,
-            "location": self.location,
-            "object": self.object,
-            "color": self.color,
-            "event": self.event,
-            "alert": self.alert,
-            "event_type": self.event_type,
-            "severity": self.severity,
-        }
+# Instead of a heavy class, we use a TypedDict. 
+# This helps with autocomplete in your IDE without adding unnecessary code.
+
+class DroneEvent(TypedDict):
+    time: str
+    location: str
+    object: List[str]
+    color: List[str]
+    event: List[str]
+    alert: str
+    event_type: str
+    severity: str

@@ -2,429 +2,113 @@
     {
         "time": "00:01",
         "location": "gate",
-        "object": "truck",
-        "color": null,
-        "event": null,
-        "alert": "none",
-        "event_type": "none",
-        "severity": "none"
-    },
-    {
-        "time": "00:03",
-        "location": "fence",
-        "object": "person",
-        "color": null,
-        "event": "loitering",
-        "alert": "alert",
-        "event_type": "loitering",
-        "severity": "high"
-    },
-    {
-        "time": "00:07",
-        "location": "gate",
-        "object": "truck",
-        "color": "white",
-        "event": "parked",
-        "alert": "none",
-        "event_type": "none",
-        "severity": "none"
-    },
-    {
-        "time": "00:12",
-        "location": "road",
-        "object": "car",
-        "color": "red",
-        "event": "speeding",
-        "alert": "warning",
-        "event_type": "speeding",
-        "severity": "medium"
-    },
-    {
-        "time": "00:01",
-        "location": "gate",
-        "object": "truck",
-        "color": null,
-        "event": null,
-        "alert": "none",
-        "event_type": "none",
-        "severity": "none"
-    },
-    {
-        "time": "00:03",
-        "location": "fence",
-        "object": "person",
-        "color": null,
-        "event": "loitering",
-        "alert": "alert",
-        "event_type": "loitering",
-        "severity": "high"
-    },
-    {
-        "time": "00:07",
-        "location": "gate",
-        "object": "truck",
-        "color": "white",
-        "event": "parked",
-        "alert": "none",
-        "event_type": "none",
-        "severity": "none"
-    },
-    {
-        "time": "00:12",
-        "location": "road",
-        "object": "car",
-        "color": "red",
-        "event": "speeding",
-        "alert": "warning",
-        "event_type": "speeding",
-        "severity": "medium"
-    },
-    {
-        "time": "00:01",
-        "location": "gate",
-        "object": "truck",
-        "color": null,
-        "event": null,
-        "alert": "none",
-        "event_type": "none",
-        "severity": "none"
-    },
-    {
-        "time": "00:03",
-        "location": "fence",
-        "object": "person",
-        "color": null,
-        "event": "loitering",
-        "alert": "alert",
-        "event_type": "loitering",
-        "severity": "high"
-    },
-    {
-        "time": "00:07",
-        "location": "gate",
-        "object": "truck",
-        "color": "white",
-        "event": "parked",
-        "alert": "none",
-        "event_type": "none",
-        "severity": "none"
-    },
-    {
-        "time": "00:12",
-        "location": "road",
-        "object": "car",
-        "color": "red",
-        "event": "speeding",
-        "alert": "warning",
-        "event_type": "speeding",
-        "severity": "medium"
-    },
-    {
-        "time": "00:01",
-        "location": "gate",
-        "object": "truck",
-        "color": null,
-        "event": null,
-        "alert": "none",
-        "event_type": "none",
-        "severity": "none"
-    },
-    {
-        "time": "00:03",
-        "location": "fence",
-        "object": "person",
-        "color": null,
-        "event": "loitering",
-        "alert": "alert",
-        "event_type": "loitering",
-        "severity": "high"
-    },
-    {
-        "time": "00:07",
-        "location": "gate",
-        "object": "truck",
-        "color": "white",
-        "event": "parked",
-        "alert": "none",
-        "event_type": "none",
-        "severity": "none"
-    },
-    {
-        "time": "00:12",
-        "location": "road",
-        "object": "car",
-        "color": "red",
-        "event": "speeding",
-        "alert": "warning",
-        "event_type": "speeding",
-        "severity": "medium"
-    },
-    {
-        "time": "00:01",
-        "location": "gate",
-        "object": "truck",
-        "color": null,
-        "event": null,
-        "alert": "none",
-        "event_type": "none",
-        "severity": "none"
-    },
-    {
-        "time": "00:03",
-        "location": "fence",
-        "object": "person",
-        "color": null,
-        "event": "loitering",
-        "alert": "alert",
-        "event_type": "loitering",
-        "severity": "high"
-    },
-    {
-        "time": "00:07",
-        "location": "gate",
-        "object": "truck",
-        "color": "white",
-        "event": "parked",
-        "alert": "none",
-        "event_type": "none",
-        "severity": "none"
-    },
-    {
-        "time": "00:12",
-        "location": "road",
-        "object": "car",
-        "color": "red",
-        "event": "speeding",
-        "alert": "warning",
-        "event_type": "speeding",
-        "severity": "medium"
-    },
-    {
-        "time": "00:01",
-        "location": "garage",
-        "object": "truck",
-        "color": null,
-        "event": "parked",
-        "alert": "info",
-        "event_type": "general_observation",
-        "severity": "low"
-    },
-    {
-        "time": "00:03",
-        "location": "road",
-        "object": null,
-        "color": null,
-        "event": null,
-        "alert": "info",
-        "event_type": "general_observation",
-        "severity": "low"
-    },
-    {
-        "time": "00:07",
-        "location": "road",
-        "object": null,
-        "color": null,
-        "event": null,
-        "alert": "info",
-        "event_type": "general_observation",
-        "severity": "low"
-    },
-    {
-        "time": "00:12",
-        "location": "road",
-        "object": null,
-        "color": null,
-        "event": null,
-        "alert": "info",
-        "event_type": "general_observation",
-        "severity": "low"
-    },
-    {
-        "time": "00:01",
-        "location": "garage",
         "object": [
-            "truck"
-        ],
-        "color": [],
-        "event": [
-            "parked"
-        ],
-        "alert": "warning",
-        "event_type": "vehicle_parked_at_garage",
-        "severity": "medium"
-    },
-    {
-        "time": "00:03",
-        "location": "road",
-        "object": [],
-        "color": [],
-        "event": [],
-        "alert": "info",
-        "event_type": "monitoring_road",
-        "severity": "low"
-    },
-    {
-        "time": "00:07",
-        "location": "road",
-        "object": [],
-        "color": [],
-        "event": [],
-        "alert": "info",
-        "event_type": "monitoring_road",
-        "severity": "low"
-    },
-    {
-        "time": "00:12",
-        "location": "road",
-        "object": [],
-        "color": [],
-        "event": [],
-        "alert": "info",
-        "event_type": "monitoring_road",
-        "severity": "low"
-    },
-    {
-        "time": "00:01",
-        "location": "road",
-        "object": [
-            "truck"
-        ],
-        "color": [],
-        "event": [
-            "parked"
-        ],
-        "alert": "warning",
-        "event_type": "vehicle_parked_at_road",
-        "severity": "medium"
-    },
-    {
-        "time": "00:03",
-        "location": "road",
-        "object": [
-            "person"
-        ],
-        "color": [],
-        "event": [],
-        "alert": "info",
-        "event_type": "observing_person_at_road",
-        "severity": "low"
-    },
-    {
-        "time": "00:07",
-        "location": "road",
-        "object": [
-            "truck"
-        ],
-        "color": [],
-        "event": [],
-        "alert": "warning",
-        "event_type": "repeated_vehicle_at_road",
-        "severity": "medium"
-    },
-    {
-        "time": "00:12",
-        "location": "road",
-        "object": [],
-        "color": [],
-        "event": [],
-        "alert": "info",
-        "event_type": "monitoring_road",
-        "severity": "low"
-    },
-    {
-        "time": "00:01",
-        "location": "road",
-        "object": [
-            "truck"
-        ],
-        "color": [],
-        "event": [
-            "parked"
-        ],
-        "alert": "warning",
-        "event_type": "vehicle_parked_at_road",
-        "severity": "medium"
-    },
-    {
-        "time": "00:03",
-        "location": "road",
-        "object": [
-            "person"
-        ],
-        "color": [],
-        "event": [],
-        "alert": "info",
-        "event_type": "observing_person_at_road",
-        "severity": "low"
-    },
-    {
-        "time": "00:07",
-        "location": "road",
-        "object": [
-            "truck"
-        ],
-        "color": [],
-        "event": [],
-        "alert": "warning",
-        "event_type": "repeated_vehicle_at_road",
-        "severity": "medium"
-    },
-    {
-        "time": "00:12",
-        "location": "road",
-        "object": [],
-        "color": [],
-        "event": [],
-        "alert": "info",
-        "event_type": "monitoring_road",
-        "severity": "low"
-    },
-    {
-        "time": "00:01",
-        "location": "road",
-        "object": [
-            "trucks"
+            "cars"
         ],
         "color": [],
         "event": [
             "parked"
         ],
         "alert": "info",
-        "event_type": "observing_trucks_at_road",
+        "event_type": "observing_cars",
         "severity": "low"
     },
     {
         "time": "00:03",
-        "location": "road",
+        "location": "fence",
         "object": [
             "people"
         ],
-        "color": [],
+        "color": [
+            "white"
+        ],
         "event": [],
         "alert": "info",
-        "event_type": "observing_people_at_road",
+        "event_type": "observing_people",
         "severity": "low"
     },
     {
         "time": "00:07",
-        "location": "road",
+        "location": "fence",
         "object": [
             "trucks"
         ],
-        "color": [],
+        "color": [
+            "blue",
+            "white"
+        ],
         "event": [],
         "alert": "info",
-        "event_type": "observing_trucks_at_road",
+        "event_type": "observing_trucks_at_fence",
+        "severity": "low"
+    },
+    {
+        "time": "00:12",
+        "location": "road",
+        "object": [
+            "cars"
+        ],
+        "color": [],
+        "event": [
+            "parked"
+        ],
+        "alert": "info",
+        "event_type": "observing_cars_at_road",
+        "severity": "low"
+    },
+    {
+        "time": "00:01",
+        "location": "gate",
+        "object": [
+            "cars"
+        ],
+        "color": [],
+        "event": [
+            "parked"
+        ],
+        "alert": "info",
+        "event_type": "observing_cars",
+        "severity": "low"
+    },
+    {
+        "time": "00:03",
+        "location": "fence",
+        "object": [
+            "people"
+        ],
+        "color": [
+            "white"
+        ],
+        "event": [],
+        "alert": "info",
+        "event_type": "observing_people",
+        "severity": "low"
+    },
+    {
+        "time": "00:07",
+        "location": "fence",
+        "object": [
+            "trucks"
+        ],
+        "color": [
+            "blue",
+            "white"
+        ],
+        "event": [],
+        "alert": "info",
+        "event_type": "observing_trucks_at_fence",
         "severity": "low"
     },
     {
         "time": "00:12",
         "location": "road",
         "object": [],
-        "color": [],
+        "color": [
+            "unknown"
+        ],
         "event": [],
-        "alert": "info",
-        "event_type": "monitoring_road",
-        "severity": "low"
+        "alert": "none",
+        "event_type": "no_activity_detected",
+        "severity": "none"
     }
 ]
