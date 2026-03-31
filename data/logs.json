@@ -110,5 +110,164 @@
         "alert": "none",
         "event_type": "no_activity_detected",
         "severity": "none"
+    },
+    {
+        "time": "00:01",
+        "location": "gate",
+        "object": [
+            "cars"
+        ],
+        "color": [],
+        "event": [
+            "parked"
+        ],
+        "alert": "info",
+        "event_type": "observing_cars",
+        "severity": "low"
+    },
+    {
+        "time": "00:03",
+        "location": "fence",
+        "object": [
+            "people"
+        ],
+        "color": [
+            "white"
+        ],
+        "event": [],
+        "alert": "info",
+        "event_type": "observing_people",
+        "severity": "low"
+    },
+    {
+        "time": "00:07",
+        "location": "fence",
+        "object": [
+            "trucks"
+        ],
+        "color": [
+            "blue",
+            "white"
+        ],
+        "event": [],
+        "alert": "info",
+        "event_type": "observing_trucks_at_fence",
+        "severity": "low"
+    },
+    {
+        "time": "00:12",
+        "location": "road",
+        "object": [],
+        "color": [],
+        "event": [],
+        "alert": "none",
+        "event_type": "no_activity_detected",
+        "severity": "none"
+    },
+    {
+        "time": "00:01",
+        "location": "gate",
+        "object": [
+            "cars"
+        ],
+        "color": [],
+        "event": [
+            "parked"
+        ],
+        "alert": "info",
+        "event_type": "observing_cars",
+        "severity": "low"
+    },
+    {
+        "time": "00:03",
+        "location": "fence",
+        "object": [
+            "people"
+        ],
+        "color": [
+            "white"
+        ],
+        "event": [],
+        "alert": "info",
+        "event_type": "observing_people",
+        "severity": "low"
+    },
+    {
+        "time": "00:07",
+        "location": "fence",
+        "object": [
+            "trucks"
+        ],
+        "color": [
+            "blue",
+            "white"
+        ],
+        "event": [],
+        "alert": "info",
+        "event_type": "observing_trucks_at_fence",
+        "severity": "low"
+    },
+    {
+        "time": "00:12",
+        "location": "road",
+        "object": [],
+        "color": [],
+        "event": [],
+        "alert": "none",
+        "event_type": "no_activity_detected",
+        "severity": "none"
+    },
+    {
+        "time": "00:01",
+        "location": "gate",
+        "object": [
+            "cars"
+        ],
+        "color": [],
+        "event": [
+            "parked"
+        ],
+        "alert": "info",
+        "event_type": "observing_cars",
+        "severity": "low"
+    },
+    {
+        "time": "00:03",
+        "location": "fence",
+        "object": [
+            "people"
+        ],
+        "color": [
+            "white"
+        ],
+        "event": [],
+        "alert": "info",
+        "event_type": "observing_people",
+        "severity": "low"
+    },
+    {
+        "time": "00:07",
+        "location": "fence",
+        "object": [
+            "trucks"
+        ],
+        "color": [
+            "blue",
+            "white"
+        ],
+        "event": [],
+        "alert": "info",
+        "event_type": "observing_trucks_at_fence",
+        "severity": "low"
+    },
+    {
+        "time": "00:12",
+        "location": "road",
+        "object": [],
+        "color": [],
+        "event": [],
+        "alert": "none",
+        "event_type": "no_activity_detected",
+        "severity": "none"
     }
 ]

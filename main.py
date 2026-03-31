@@ -1,5 +1,16 @@
 import logging
+import os
 import json
+
+# 1. SHUT DOWN LIBRARY LOGGING (Do this before importing transformers/VLM)
+logging.getLogger("transformers").setLevel(logging.ERROR)
+logging.getLogger("httpx").setLevel(logging.ERROR)
+logging.getLogger("huggingface_hub").setLevel(logging.ERROR)
+
+# 2. OPTIONAL: Tell Hugging Face to stop checking for updates every time
+os.environ["TRANSFORMERS_VERBOSITY"] = "error"
+os.environ["HF_HUB_DISABLE_SYMLINKS_WARNING"] = "1"
+
 from services.analyzer import Analyzer
 from services.database import init_db, insert_event, log_to_json, get_repeated_threats 
 from services.alert_service import generate_alert
@@ -7,7 +18,7 @@ from services.query_service import show_by_object, show_all_events
 from simulator.simulator import get_simulated_frames
 from services.vlm import VLM
 
-# 1. Configure logging (Global scope is better for initialization)
+# 3. CONFIGURE YOUR LOGGING
 logging.basicConfig(
     level=logging.INFO,
     format='%(asctime)s - %(levelname)s - %(message)s',
@@ -18,6 +29,7 @@ logging.basicConfig(
 )
 
 def main():
+
     logging.info("--- Initializing Drone Security System ---")
     init_db()
 
@@ -45,6 +57,15 @@ def main():
         except Exception as e:
             logging.error(f"Unexpected VLM crash: {e}")
             description = "observation failure"
+
+            # This hides the 404/Connection logs from Hugging Face
+            logging.getLogger("transformers").setLevel(logging.ERROR)
+            logging.getLogger("httpx").setLevel(logging.ERROR)
+            logging.basicConfig(...) # Keep your existing config here
+
+            # --- ADD THESE LINES TO HIDE THE NOISE ---
+            logging.getLogger("transformers").setLevel(logging.ERROR)
+            logging.getLogger("httpx").setLevel(logging.ERROR)
 
         # -------------------------------
         # Step 2: Reasoning (NLP Analysis)
