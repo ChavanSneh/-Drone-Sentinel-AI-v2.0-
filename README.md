@@ -1,89 +1,63 @@
-# 🚁 Drone Security Analyst Agent (v2.0)
+## 🚁 Drone Sentinel AI (v2.0)
 
-An advanced **AI-powered orchestration engine** that transforms raw drone visual data into structured security intelligence. Unlike standard motion detectors, this agent utilizes a **Vision-Language Model (VLM)** and **Persistent Relational Memory** to understand intent, detect anomalies, and recognize historical behavioral patterns.
+# An advanced Autonomous AI Orchestration Engine that transforms raw drone visual data into structured, actionable security intelligence. 
 
----
-
-## 🧠 System Overview
-
-This system simulates a real-time drone monitoring pipeline by combining three core pillars of **AI Engineering**:
-
-* **Perception:** Utilizing `Salesforce/BLIP` VLM for deep scene understanding and natural language narration.
-* **Reasoning:** A heuristic engine that performs **Entity Extraction** and ranks threats by severity based on environmental context.
-* **Memory:** Dual-layer persistence using short-term Python history and long-term **SQLite** relational indexing.
+# Version 2.0 introduces a Distributed Architecture, separating high-compute Edge Vision from Ground Station Control for a production-ready simulation.
 
 ---
 
-## 🏗️ Architecture & Logic Flow
+## 🏗️ System Architecture: The "Air-to-Ground" HandshakeThis project is architected as a modular, service-oriented ecosystem designed for real-world robotics deployment.
 
-The system follows a modular **Perception-Reasoning-Memory** pipeline:
+# 1. The Drone (Edge Intelligence)Perception (vlm.py): Uses the Salesforce/BLIP VLM to narrate the environment in real-time.Resiliency Layer: Implemented Pre-Flight Guardrails that verify file integrity before inference, preventing system crashes during intermittent or corrupted data streams.Reasoning (analyzer.py): A heuristic engine that extracts entities and ranks threats by severity (High/Medium/Low).
 
-1.  **Visual Input:** Simulated drone frames (Images or raw VLM descriptions).
-2.  **VLM Inference:** Translates pixels into high-context natural language narratives.
-3.  **NLP Analyzer:** Extracts structured entities (Objects, Colors, Locations, Events) using **Normalized Keyword Mapping**.
-4.  **Logic Engine:** Compares current sightings against historical data to escalate threat levels dynamically.
-5.  **Relational Storage:** Persistent logging in **SQLite** and **JSON** for long-term pattern recognition.
+# 2. The Ground Station (Control & Memory)Simulation Suite (simulator.py): Generates a high-fidelity synthetic environment to stress-test the AI's logic.Relational Memory (database.py): Powered by SQLite for long-term indexing. 
 
----
+# v2.0 utilizes JSON Serialization to store complex object lists, ensuring 100% data integrity for multi-object detections.
 
-## 🚀 Key Features
-
-### 1. Visual Narrative Processing (VLM)
-Uses the **BLIP** model to generate descriptive context rather than simple labels.
-* **Input:** Image of semi-trucks in a parking lot.
-* **Output:** `"a row of semi trucks parked in a parking lot"`
-
-### 2. Data Normalization Strategy
-The system handles "messy" AI input by mapping linguistic variations (e.g., *"semi," "lorry,"* or *"trucks"*) to a consistent **Relational Key** (`trucks`). This ensures 100% accuracy in database queries and frequency counts.
-
-### 3. Stateful Behavioral Intelligence
-* **Short-Term Context:** Recognizes shifts within a single mission (e.g., a vehicle moving from a road to being **"stuck"** at a gate).
-* **Pattern Recognition:** Identifies objects entering the perimeter multiple times across different days or sessions.
-    > **Example Alert:** `trucks detected 5 times today! (Pattern Identified)`
+# Black Box Recorder (drone.log): A professional logging framework that records every system event, error, and sighting for post-flight forensic auditing.
 
 ---
 
-## ⚠️ Threat Detection Matrix
+## 🚀 Key Features (v2.0 Updates)
 
-| Scenario | Event Type | Severity | Alert Level |
-| :--- | :--- | :--- | :--- |
-| **Object Trapped/Blocked** | `object_stuck_at_[location]` | **High** | Alert |
-| **Unauthorized Access** | `unauthorized_fence_access` | **High** | Alert |
-| **Repeated Sighting** | `repeated_vehicle_at_road` | **Medium** | Warning |
-| **Active Patrol** | `monitoring_road` | **Low** | Info |
+# 🛡️ Failure-Tolerant VisionThe system is now "crash-proof." If a camera feed is interrupted or an image file is missing, the drone logs a Vision failure but maintains its flight loop, ensuring mission continuity—a critical requirement for autonomous hardware.
 
----
+## 💾 High-Integrity Data Persistence
 
-## 🛠️ Tech Stack
+# We migrated from fragile comma-separated strings to Safe JSON Serialization.
 
-### Core Technologies
-* **Language:** Python 3.10+
-* **Vision:** Hugging Face Transformers (`BLIP-base`)
-* **Database:** SQLite3 (Relational Indexing)
-* **NLP:** Regex-based Entity Extraction
+# The Problem: Traditional strings break if a description contains a literal comma (e.g., "a car, blue, and a truck").
 
-### AI-Assisted Development
-This project leveraged a multi-LLM workflow (**Gemini, ChatGPT, and Claude**) to architect the service-oriented structure, debug complex VLM inference edge cases, and optimize relational database queries.
+# The v2.0 Solution: Using json.dumps() ensures that complex lists of objects and colors are stored and retrieved as structured arrays with 100% precision.
+
+## 🔇 Intelligent Signal-to-Noise ManagementImplemented a Nuclear Silence logging strategy. 
+
+# Background noise from AI libraries (Hugging Face, HTTPX, Transformers) is suppressed at the kernel level. 
+
+# This ensures the operator's console remains clean, displaying only mission-critical alerts and telemetry.
 
 ---
 
-## ▶️ Installation & Usage
+## 📈 Stateful Pattern RecognitionBy indexing sightings in a persistent database, the agent recognizes recurring threats across different flight sessions.Example Alert: WARNING: White truck detected 3 times this week. 
+--- 
+# (Pattern Identified)⚠️ Threat Detection MatrixScenarioEvent TypeSeverityActionAsset Blockageobject_stuck_at_[location]HighAlert & LogBoundary Intrusionunauthorized_fence_accessHighAlert & LogPersistent Suspectrepeated_vehicle_at_roadMediumWarningRoutine Patrolmonitoring_roadLowInfo
 
-### 1. Install Dependencies
+---
 
-pip install transformers pillow torch
+## 🛠️ Tech Stack & WorkflowCore TechnologiesVision: Hugging Face Transformers (BLIP-image-captioning-base)Storage: SQLite3 with JSON SerializationLogic: Python 3.10+ (Type-hinted for reliability)Observability: Python Logging Framework (Handlers: File + Stream)
 
-2. Execute the System
+---
 
-python main.py
+## ⚡ AI-Orchestrated DevelopmentThis system was built using a Triple-LLM Workflow:Claude & Gemini: Acted as System Architects for the distributed "Air-to-Ground" model.ChatGPT & GitHub Copilot: Served as Implementation Specialists for SQL optimization and JSON logic.Impact: Achieved a production-grade prototype with robust error handling and data persistence in under 24 hours.
 
-3. Test Persistence
+---
 
-Run the script multiple times. The system will demonstrate its Relational Memory by flagging recurring threats stored in drone_security.db, even after the script is restarted.
+## ▶️ Installation & Flight Manual
+# 1. Clone & Install DependenciesBashpip install transformers pillow torch
+# 2. Launch the MissionBashpython main.py
+# 3. Review the Black BoxCheck drone.log to see the full forensic history of the flight, including any suppressed system errors and successful pattern detections.
+
 ---
 
 ## 👨‍💻 Author
-
-# Sneh Chavan
-
-# AI Product Engineer | Specializing in Rapid Prototyping & AI Orchestration
+# Sneh Chavan AI Product Engineer | Specializing in Rapid Prototyping & AI Orchestration

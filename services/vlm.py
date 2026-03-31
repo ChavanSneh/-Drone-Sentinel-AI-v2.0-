@@ -18,7 +18,8 @@ class VLM:
         
         # 1. Safety Check: Does the file actually exist?
         if not os.path.exists(image_path):
-            print(f"[SYSTEM ERROR] Image not found at: {image_path}")
+            import logging
+            logging.error(f"Image not found at: {image_path}")
             return "error: missing_file"
 
         # 2. Process Image with Error Handling
