@@ -43,7 +43,8 @@
 ---
 
 ### 🛠️ Tech Stack & WorkflowCore Technologies Vision: 
-# Hugging Face Transformers (BLIP-image-captioning-base)Storage: SQLite3 with JSON SerializationLogic: Python 3.10+ (Type-hinted for reliability)Observability: Python Logging Framework (Handlers: File + Stream)
+
+### Hugging Face Transformers (BLIP-image-captioning-base)Storage: SQLite3 with JSON SerializationLogic: Python 3.10+ (Type-hinted for reliability)Observability: Python Logging Framework (Handlers: File + Stream)
 
 ---
 
