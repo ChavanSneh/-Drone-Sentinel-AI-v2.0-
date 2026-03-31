@@ -53,7 +53,7 @@
 ### This system was built using a Triple-LLM Workflow:Claude & Gemini: Acted as System Architects for the distributed "Air-to-Ground" model.ChatGPT & GitHub Copilot: Served as Implementation Specialists for SQL optimization and JSON logic.
 ###Impact: Achieved a production-grade prototype with robust error handling and data persistence in under 24 hours.
 
-=======
+---
 
 ### 🛡️ Failure-Tolerant VisionThe system is now "crash-proof." If a camera feed is interrupted or an image file is missing, the drone logs a Vision failure but maintains its flight loop, ensuring mission continuity—a critical requirement for autonomous hardware.
 
