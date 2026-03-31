@@ -16,11 +16,11 @@
 
 ---
 
-##🚀 Key Features (v2.0 Updates)
+## 🚀 Key Features (v2.0 Updates)
 
 ---
 
-###🛡️ Failure-Tolerant VisionThe system is now "crash-proof." If a camera feed is interrupted or an image file is missing, the drone logs a Vision failure but maintains its flight loop, ensuring mission continuity—a critical requirement for autonomous hardware.
+### 🛡️ Failure-Tolerant VisionThe system is now "crash-proof." If a camera feed is interrupted or an image file is missing, the drone logs a Vision failure but maintains its flight loop, ensuring mission continuity—a critical requirement for autonomous hardware.
 
 ---
 
