@@ -1,0 +1,15 @@
+{
+  "drone_id": "Sentinel-Alpha-01",
+  "telemetry": {
+    "latitude": 18.5204,
+    "longitude": 73.8567,
+    "altitude_meters": 45.5,
+    "battery_percentage": 82
+  },
+  "raw_vision_summary": {
+    "detected_objects": ["man", "pedestrian", "silver", "car"],
+    "confidence_scores": [0.98, 0.95, 0.91],
+    "scene_type": "gate entrance boundary perimeter",
+    "timestamp": "2026-05-29T00:20:00Z"
+  }
+}
