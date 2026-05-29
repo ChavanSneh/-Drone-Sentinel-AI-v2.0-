@@ -2,6 +2,7 @@ import logging
 import os
 import json
 import config
+import time
 
 # Use the config to silence logs
 for lib in config.SILENCED_LIBRARIES:
@@ -47,6 +48,7 @@ def main():
     logging.info("--- Starting Frame Processing Flow ---")
 
     for frame in frames:
+        time.sleep(5)
         # -------------------------------
         # Step 1: AI Perception (VLM)
         # -------------------------------

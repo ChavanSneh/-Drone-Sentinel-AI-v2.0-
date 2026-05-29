@@ -37,19 +37,21 @@ class Analyzer:
     def track_hardware_state(self, current_time_str: str) -> float:
         """Calculates battery depletion based on the time difference between frames."""
         try:
-            # Clean ISO string formatting for Python's datetime parser
-            clean_time_str = current_time_str.replace("Z", "+00:00")
-            current_time = datetime.fromisoformat(clean_time_str)
+            # Check if it's a full ISO format or just a short string like MM:SS / HH:MM
+            if "T" in current_time_str or "-" in current_time_str:
+                clean_time_str = current_time_str.replace("Z", "+00:00")
+                current_time = datetime.fromisoformat(clean_time_str)
+            else:
+                # Fallback parser for simple "MM:SS" or "HH:MM" mock inputs
+                current_time = datetime.strptime(current_time_str, "%M:%S")
         except ValueError:
-            # Fallback if timestamp string format is unexpected
+            # Fallback if timestamp string format completely breaks
             return self.current_battery
 
-        # If it's the very first frame tracked, initialize the baseline timestamp
         if self.last_timestamp is None:
             self.last_timestamp = current_time
             return self.current_battery
 
-        # Compute elapsed time delta
         elapsed_seconds = (current_time - self.last_timestamp).total_seconds()
         elapsed_minutes = elapsed_seconds / 60.0
 
@@ -59,6 +61,15 @@ class Analyzer:
             self.last_timestamp = current_time
 
         return round(self.current_battery, 2)
+
+    def get_estimated_time_remaining(self) -> float:
+        """Calculates how many minutes of flight time are left before hitting the 20% critical fail-safe."""
+        if self.current_battery <= 20.0:
+            return 0.0
+        
+        # Minutes left = (Current Battery - 20% Reserve Limit) / Burn Rate per minute
+        minutes_left = (self.current_battery - 20.0) / self.rate
+        return round(minutes_left, 1)
 
     def extract_matches(self, text: str, keyword_dict: dict) -> list:
         """Helper to find all matching category labels in the text."""
@@ -165,7 +176,8 @@ class Analyzer:
             "object": entities.get("object"),
             "color": entities.get("color"),
             "event": entities.get("event"),
-            "battery_level": self.current_battery,  # Returns the updated calculated battery
+            "battery_level": self.current_battery,
+            "estimated_time_remaining_mins": self.get_estimated_time_remaining(),
             "alert": severity_to_alert[event_info["severity"]],
             "event_type": event_info["event_type"],
             "severity": event_info["severity"]

@@ -3,35 +3,19 @@ import os
 import json
 from typing import List, Dict
 
-# --- Step 1: Secure the Path ---
-# Dynamically find project root to prevent db placement errors
+# --- Step 1: Secure the Paths ---
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DB_NAME = os.path.join(BASE_DIR, "drone_security.db")
-LOG_FILE = os.path.join(BASE_DIR, "data", "logs.json")
-
-def log_to_json(event: dict):
-    """Saves the raw AI result (with lists) to a JSON file."""
-    os.makedirs(os.path.dirname(LOG_FILE), exist_ok=True)
-
-    if not os.path.exists(LOG_FILE):
-        with open(LOG_FILE, "w") as f:
-            json.dump([], f)
-
-    with open(LOG_FILE, "r") as f:
-        try:
-            data = json.load(f)
-        except (json.JSONDecodeError, EOFError):
-            data = []
-
-    data.append(event)
-
-    with open(LOG_FILE, "w") as f:
-        json.dump(data, f, indent=4)
+LOG_FILE = os.path.join(BASE_DIR, "drone_missions.jsonl") # Updated to .jsonl to prevent IDE errors
 
 # --- Step 2: Initialize Table ---
 def init_db():
     conn = sqlite3.connect(DB_NAME)
     cursor = conn.cursor()
+
+    # ⚠️ TEMPORARY line to wipe legacy format mismatch rows
+    cursor.execute("DROP TABLE IF EXISTS events;")
+
     # We keep 'IF NOT EXISTS' so we don't wipe history on every drone restart
     cursor.execute("""
         CREATE TABLE IF NOT EXISTS events (
@@ -67,7 +51,7 @@ def insert_event(event: Dict):
     """, (
         event.get("time"), 
         event.get("location"), 
-        event.get("object"), # Now a string: "car, truck"
+        event.get("object"), # String representation for DB consistency
         event.get("color"), 
         event.get("event"), 
         event.get("alert"),
@@ -116,7 +100,7 @@ def get_repeated_threats(threshold=2):
     query = """
     SELECT object, IFNULL(color, 'unknown'), COUNT(*) as frequency 
     FROM events 
-    WHERE object != 'none'
+    WHERE object != 'none' AND object != '[]'
     GROUP BY object, IFNULL(color, 'unknown') 
     HAVING frequency >= ?
     ORDER BY frequency DESC
@@ -127,3 +111,34 @@ def get_repeated_threats(threshold=2):
     conn.close()
     return repeats
 
+# --- Step 5: JSON Logging for Forensics (Unified and Patched) ---
+def log_to_json(event: dict):
+    """
+    Appends the structured mission analysis result directly into a 
+    persistent .jsonl log file for post-flight forensic auditing.
+    """
+    # Safely ensure the target directory structure exists if parsing sub-directories
+    folder_path = os.path.dirname(LOG_FILE)
+    if folder_path:
+        os.makedirs(folder_path, exist_ok=True)
+        
+    # Map all telemetry fields cleanly
+    log_entry = {
+        "time": event.get("time"),
+        "location": event.get("location"),
+        "object": event.get("object"),
+        "color": event.get("color"),
+        "event": event.get("event"),
+        "battery_level": event.get("battery_level"),
+        "estimated_time_remaining_mins": event.get("estimated_time_remaining_mins"),
+        "alert": event.get("alert"),
+        "event_type": event.get("event_type"),
+        "severity": event.get("severity")
+    }
+    
+    try:
+        # Append data to the file without destroying historical logs
+        with open(LOG_FILE, "a") as f:
+            f.write(json.dumps(log_entry) + "\n")
+    except Exception as e:
+        print(f"❌ Logger Error: Failed writing to JSON log file: {e}")

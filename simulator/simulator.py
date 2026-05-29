@@ -1,25 +1,32 @@
 # simulator/simulator.py
 
+from datetime import datetime, timezone
+
 def get_simulated_frames():
+    """Generates synthetic flight telemetry data with fully automatic live timestamps."""
+    
+    # Automatically get the exact current time in standard ISO format
+    current_iso_time = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+    
     return [
         {
-            "time": "00:01",
+            "time": current_iso_time,  # 🤖 100% Automatic!
             "location": "gate",
-            "image": "data/images/truck.jpg"
+            "description": "a silver car parked near the entrance entry gate"
         },
         {
-            "time": "00:03",
+            "time": current_iso_time,  # 🤖 100% Automatic!
             "location": "fence",
-            "image": "data/images/person.jpg"
+            "description": "a individual person wearing a white shirt standing near the perimeter boundary wall"
         },
         {
-            "time": "00:07",
-            "location": "gate",
-            "image": "data/images/truck2.jpg"
+            "time": current_iso_time,  # 🤖 100% Automatic!
+            "location": "fence",
+            "description": "a blue and white truck idling right beside the security wall fence"
         },
         {
-            "time": "00:12",
+            "time": current_iso_time,  # 🤖 100% Automatic!
             "location": "road",
-            "image": "data/images/car.jpg"
+            "image": "data/images/car.jpg" 
         }
     ]
