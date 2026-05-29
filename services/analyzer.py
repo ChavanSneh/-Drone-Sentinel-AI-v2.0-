@@ -1,4 +1,5 @@
 import re
+from datetime import datetime
 
 # -------------------------------
 # Keywords (Expanded for better AI matching)
@@ -27,6 +28,38 @@ EVENT_KEYWORDS = {
 }
 
 class Analyzer:
+    def __init__(self, start_battery=100.0, depletion_rate_per_min=2.5):
+        """Initializes the engine with tracking states."""
+        self.current_battery = start_battery
+        self.rate = depletion_rate_per_min
+        self.last_timestamp = None
+
+    def track_hardware_state(self, current_time_str: str) -> float:
+        """Calculates battery depletion based on the time difference between frames."""
+        try:
+            # Clean ISO string formatting for Python's datetime parser
+            clean_time_str = current_time_str.replace("Z", "+00:00")
+            current_time = datetime.fromisoformat(clean_time_str)
+        except ValueError:
+            # Fallback if timestamp string format is unexpected
+            return self.current_battery
+
+        # If it's the very first frame tracked, initialize the baseline timestamp
+        if self.last_timestamp is None:
+            self.last_timestamp = current_time
+            return self.current_battery
+
+        # Compute elapsed time delta
+        elapsed_seconds = (current_time - self.last_timestamp).total_seconds()
+        elapsed_minutes = elapsed_seconds / 60.0
+
+        if elapsed_minutes > 0:
+            battery_used = elapsed_minutes * self.rate
+            self.current_battery = max(0.0, self.current_battery - battery_used)
+            self.last_timestamp = current_time
+
+        return round(self.current_battery, 2)
+
     def extract_matches(self, text: str, keyword_dict: dict) -> list:
         """Helper to find all matching category labels in the text."""
         text = text.lower()
@@ -47,7 +80,15 @@ class Analyzer:
         }
 
     def detect_event(self, entities: dict, history: list) -> dict:
-        """Determines event type and severity based on AI-extracted entities."""
+        """Determines event type and severity based on AI-extracted entities and hardware states."""
+        
+        # --- PRIORITY 0: CRITICAL HARDWARE FAIL-SAFES ---
+        if self.current_battery <= 20.0:
+            return {
+                "event_type": "critical_battery_emergency_landing", 
+                "severity": "high"
+            }
+
         obj_list = entities.get("object") or []
         event_list = entities.get("event") or []
         location_list = entities.get("location") or []
@@ -69,15 +110,12 @@ class Analyzer:
         # --- PRIORITY 2: MEDIUM SEVERITY (WARNINGS) ---
         vehicle_keywords = {"car", "cars", "truck", "trucks"}
         if any(vehicle in obj_list for vehicle in vehicle_keywords):
-            # Speeding detection
             if "speeding" in event_list:
                 return {"event_type": "speeding_vehicle_detected", "severity": "medium"}
 
-            # Unauthorized parking detection
             if "parked" in event_list and location_list:
                 return {"event_type": f"vehicle_parked_at_{location_list[0]}", "severity": "medium"}
 
-            # History-based repeat sighting detection
             if location_list:
                 repeat_count = sum(
                     1 for h in history
@@ -88,7 +126,6 @@ class Analyzer:
                     loc_name = location_list[0]
                     return {"event_type": f"repeated_vehicle_at_{loc_name}", "severity": "medium"}
 
-            # Proximity to secure perimeter locations is higher-risk
             if any(loc in ["fence", "gate", "garage"] for loc in location_list):
                 return {"event_type": "vehicle_near_secure_perimeter", "severity": "medium"}
 
@@ -101,11 +138,17 @@ class Analyzer:
         if location_list:
             return {"event_type": f"monitoring_{location_list[0]}", "severity": "low"}
 
-        # Final fallback
         return {"event_type": "no_activity_detected", "severity": "none"}
 
     def analyze_frame(self, description: str, telemetry: dict, history: list) -> dict:
         """Main entry point for frame analysis."""
+        
+        # 1. Update internal battery state using the frame's time before processing rules
+        frame_time = telemetry.get("time")
+        if frame_time:
+            self.track_hardware_state(frame_time)
+            
+        # 2. Extract entities and run event checking
         entities = self.extract_entities(description)
         event_info = self.detect_event(entities, history)
 
@@ -116,13 +159,13 @@ class Analyzer:
             "high": "alert"
         }
 
-        # AI Vision is prioritized over static Telemetry for the 'location' field
         return {
-            "time": telemetry.get("time"),
+            "time": frame_time,
             "location": entities.get("location")[0] if entities.get("location") else telemetry.get("location"),
             "object": entities.get("object"),
             "color": entities.get("color"),
             "event": entities.get("event"),
+            "battery_level": self.current_battery,  # Returns the updated calculated battery
             "alert": severity_to_alert[event_info["severity"]],
             "event_type": event_info["event_type"],
             "severity": event_info["severity"]
